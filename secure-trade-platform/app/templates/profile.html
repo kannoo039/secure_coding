@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container mt-4">
+    <h2>{{ user.username }}의 프로필</h2>
+    <p><strong>소개:</strong> {{ user.bio or "소개가 없습니다." }}</p>
+    
+    {% if current_user.id == user.id %}
+        <!-- 본인일 때만 표시 -->
+	<p><strong>Wallet:</strong> {{ user.balance }} 원</p>
+        <a href="{{ url_for('user_bp.settings') }}" class="btn btn-outline-secondary mt-3">설정</a>
+    {% else %}
+        <!-- 다른 유저일 때는 채팅 버튼 표시 -->
+        <a href="{{ url_for('chat_bp.chat', receiver_id=user.id) }}" class="btn btn-primary mt-3">💬 채팅하기</a>
+    {% endif %}
+
+    <hr>
+    <h3>{{ user.username }}의 등록 상품</h3>
+    {% if user.posts %}
+        <ul>
+        {% for post in user.posts %}
+            <li><a href="{{ url_for('product_bp.product_detail', post_id=post.id) }}">{{ post.title }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>등록한 상품이 없습니다.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

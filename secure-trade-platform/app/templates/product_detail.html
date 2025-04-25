@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+        <p><strong>Price:</strong> {{ post.price }} 원</p>
+        <p><strong>Posted by:</strong> {{ post.user.username }}</p>
+	{% if current_user.is_authenticated and current_user.id != post.user.id %}
+   		 <a href="{{ url_for('chat_bp.chat', receiver_id=post.user.id) }}" class="btn btn-outline-primary mt-3">💬 채팅하기</a>
+	{% endif %}
+	{% if current_user.is_authenticated %}
+            <!-- 구매 버튼 (사용자가 로그인한 경우) -->
+            <form method="POST" action="{{ url_for('product_bp.buy_product', post_id=post.id) }}">
+                <button type="submit" class="btn btn-success">Buy Now</button>
+            </form>
+
+            <!-- 구매 확정 버튼 (사용자가 로그인한 경우) -->
+            <form method="POST" action="{{ url_for('product_bp.confirm_purchase', post_id=post.id) }}" class="mt-2">
+                <button type="submit" class="btn btn-warning">Confirm Purchase</button>
+            </form>
+        {% else %}
+            <p>You need to be logged in to purchase or confirm a purchase.</p>
+        {% endif %}
+	{% if current_user.is_authenticated and current_user.id != post.user.id %}
+    	    <form method="POST" action="{{ url_for('product_bp.report_post', post_id=post.id) }}">
+        	<button type="submit" class="btn btn-outline-danger mt-2">🚫 신고하기</button>
+    	    </form>
+	{% endif %}
+
+    </div>
+{% endblock %}

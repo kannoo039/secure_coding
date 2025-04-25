@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<form method="GET" action="{{ url_for('product_bp.search') }}" class="mb-4">
+    {{ form.hidden_tag() }}
+    <div class="input-group">
+        {{ form.keyword(class="form-control", placeholder="Enter keyword or @Username") }}
+        {{ form.sort_by(class="form-select") }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+<div class="container">
+    <h2>Search Results</h2>
+    {% if results %}
+        <ul>
+            {% for post in results %}
+                <li>
+                    <a href="{{ url_for('product_bp.product_detail', post_id=post.id) }}">{{ post.title }}</a>
+                    <p>{{ post.content[:100] }}...</p>
+                    <p>Price: {{ post.price }} 원</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No results found for "{{ keyword }}"</p>
+    {% endif %}
+</div>
+{% endblock %}
+

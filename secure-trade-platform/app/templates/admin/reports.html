@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>📢 신고 내역</h2>
+
+    <h4 class="mt-4">📌 사용자 신고</h4>
+    <ul>
+        {% for report in reported_users %}
+            <li>
+                신고자 ID: {{ report.reporter_id }} → 신고 대상 사용자 ID: {{ report.reported_user_id }}
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <form method="POST" action="{{ url_for('admin_bp.deactivate_user', user_id=report.reported_user_id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-danger">계정 정지</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% else %}
+            <li>신고된 사용자가 없습니다.</li>
+        {% endfor %}
+    </ul>
+
+    <h4 class="mt-4">📌 게시글 신고</h4>
+    <ul>
+        {% for report in reported_posts %}
+            <li>
+                신고자 ID: {{ report.reporter_id }} → 신고 대상 게시글 ID: {{ report.post_id }}
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                    <form method="POST" action="{{ url_for('admin_bp.delete_post', post_id=report.post_id) }}" style="display:inline;">
+                        <button type="submit" class="btn btn-sm btn-warning">게시글 삭제</button>
+                    </form>
+                {% endif %}
+            </li>
+        {% else %}
+            <li>신고된 게시글이 없습니다.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

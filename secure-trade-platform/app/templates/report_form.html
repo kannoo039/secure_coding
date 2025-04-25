@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+    <h2>{{ target }} 신고</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+            {{ form.reason.label(class="form-label") }}
+            {{ form.reason(class="form-control") }}
+        </div>
+        {{ form.submit(class="btn btn-danger") }}
+    </form>
+</div>
+{% endblock %}
+

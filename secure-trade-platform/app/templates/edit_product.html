@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2>Edit Product</h2>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+
+        <div class="mb-3">
+            {{ form.title.label(class="form-label") }}
+            {{ form.title(class="form-control", placeholder="Enter product title") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.content.label(class="form-label") }}
+            {{ form.content(class="form-control", placeholder="Enter product description") }}
+        </div>
+        
+	<div class="mb-3">
+   	    {{ form.price.label(class="form-label") }}
+       	    {{ form.price(class="form-control", placeholder="Enter product price", type="text", inputmode="numeric", autocomplete="off") }}
+	</div>
+
+        <button type="submit" class="btn btn-primary">Update Product</button>
+        <a href="{{ url_for('product_bp.product_detail', post_id=post.id) }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+

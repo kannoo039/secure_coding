@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="mb-4">📢 실시간 공용 채팅방</h3>
+    <div id="chat-box" class="border p-3 mb-3" style="height: 400px; overflow-y: auto; background-color: #f9f9f9;"></div>
+    <form id="chat-form">
+        <div class="input-group">
+            <input type="text" id="message" class="form-control" placeholder="메시지를 입력하세요" autocomplete="off" required>
+            <button type="submit" class="btn btn-primary">전송</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script type="text/javascript">
+    const socket = io();
+
+    const chatBox = document.getElementById('chat-box');
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message');
+
+    chatForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const message = messageInput.value.trim();
+        if (message) {
+            socket.emit('public_message', { message: message });
+            messageInput.value = '';
+        }
+    });
+
+    socket.on('public_message', function (data) {
+        const messageEl = document.createElement('div');
+        messageEl.textContent = `${data.username}: ${data.message}`;
+        chatBox.appendChild(messageEl);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+</script>
+{% endblock %}
+

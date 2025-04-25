@@ -1,0 +1,44 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Search Products</h2>
+
+    <form method="POST" action="{{ url_for('product_bp.search') }}" class="mb-4">
+        {{ form.hidden_tag() }}
+        <div class="input-group">
+            {{ form.keyword(class="form-control", placeholder="Enter keyword or @Username") }}
+            {{ form.sort_by(class="form-select") }}
+            <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% if results %}
+        <div class="row">
+            {% for post in results %}
+                <div class="col-md-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ post.title }}</h5>
+                            <p class="card-text">{{ post.content[:100] }}...</p>
+                            <p class="fw-bold">{{ post.price }}원</p>
+                            <a href="{{ url_for('product_bp.product_detail', post_id=post.id) }}" class="btn btn-info">View</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No results found.</p>
+    {% endif %}
+</div>
+{% endblock %}
+

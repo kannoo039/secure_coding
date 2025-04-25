@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Charge Your Wallet</h2>
+
+        <!-- 충전 폼 -->
+        <form method="POST" action="{{ url_for('user_bp.charge_wallet') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                <label for="amount">Amount to Charge</label>
+                {{ form.amount(class="form-control", placeholder="Enter amount to charge") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Charge</button>
+        </form>
+
+        <hr>
+
+        <!-- 현재 지갑 잔액 표시 -->
+        <h3>Current Balance: {{ current_user.wallet_balance }}원</h3>
+    </div>
+{% endblock %}
+

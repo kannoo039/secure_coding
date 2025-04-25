@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>채팅 상대: {{ receiver.username }}</h3>
+    <div id="chat-box" class="border rounded p-3 mb-3" style="height: 300px; overflow-y: scroll;">
+        <!-- 실시간 채팅 메시지 출력 영역 -->
+    </div>
+
+    <form id="chat-form">
+        <div class="input-group">
+            <input type="text" id="message-input" class="form-control" placeholder="메시지를 입력하세요" autocomplete="off">
+            <button class="btn btn-primary" type="submit">전송</button>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+<script type="text/javascript">
+    const socket = io();
+
+    const room = "{{ room }}";
+    const username = "{{ current_user.username }}";
+
+    socket.emit('join', { room: room, username: username });
+
+    socket.on('status', function(data) {
+        const box = document.getElementById('chat-box');
+        box.innerHTML += `<div class="text-muted"><em>${data.msg}</em></div>`;
+        box.scrollTop = box.scrollHeight;
+    });
+
+    socket.on('receive_message', function(data) {
+        const box = document.getElementById('chat-box');
+        box.innerHTML += `<div><strong>${data.username}:</strong> ${data.message}</div>`;
+        box.scrollTop = box.scrollHeight;
+    });
+
+    document.getElementById('chat-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const input = document.getElementById('message-input');
+        const message = input.value;
+        if (message.trim() !== "") {
+            socket.emit('send_message', { room: room, username: username, message: message });
+            input.value = "";
+        }
+    });
+</script>
+{% endblock %}
+

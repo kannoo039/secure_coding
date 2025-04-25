@@ -1,0 +1,55 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Sign Up</h2>
+
+        <!-- 오류 메시지 출력 -->
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for field_name, errors in form.errors.items() %}
+                        <li><strong>{{ form[field_name].label.text }}:</strong> 
+                            {% for error in errors %}
+                                {{ error }}<br>
+                            {% endfor %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <!-- 회원가입 폼 -->
+        <form method="POST" action="{{ url_for('user_bp.register') }}">
+            {{ form.hidden_tag() }}
+            
+            <!-- 사용자 이름 입력 -->
+            <div class="form-group">
+                <label for="username">Username</label>
+                {{ form.username(class="form-control", placeholder="Enter your username") }}
+            </div>
+
+            <!-- 이메일 입력 -->
+            <div class="form-group">
+                <label for="email">Email</label>
+                {{ form.email(class="form-control", placeholder="Enter your email") }}
+            </div>
+
+            <!-- 비밀번호 입력 -->
+            <div class="form-group">
+                <label for="password">Password</label>
+                {{ form.password(class="form-control", placeholder="Enter your password") }}
+            </div>
+
+            <!-- 비밀번호 확인 입력 -->
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                {{ form.confirm_password(class="form-control", placeholder="Confirm your password") }}
+            </div>
+
+            <!-- 가입 버튼 -->
+            <button type="submit" class="btn btn-primary">Sign Up</button>
+        </form>
+    </div>
+{% endblock %}
+

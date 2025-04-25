@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">Account Settings</h2>
+
+    <!-- 이메일 수정 폼 -->
+    <form method="POST" action="{{ url_for('user_bp.settings') }}">
+        {{ email_form.hidden_tag() }}
+        <div class="mb-3">
+            {{ email_form.email.label(class="form-label") }}
+            {{ email_form.email(class="form-control", placeholder="Enter new email") }}
+        </div>
+        {{ email_form.submit(class="btn btn-primary") }}
+    </form>
+
+    <hr>
+
+    <!-- 비밀번호 변경 폼 -->
+    <form method="POST" action="{{ url_for('user_bp.settings') }}">
+        {{ password_form.hidden_tag() }}
+        <div class="mb-3">
+            {{ password_form.current_password.label(class="form-label") }}
+            {{ password_form.current_password(class="form-control", placeholder="Enter current password") }}
+        </div>
+        <div class="mb-3">
+            {{ password_form.new_password.label(class="form-label") }}
+            {{ password_form.new_password(class="form-control", placeholder="Enter new password") }}
+        </div>
+        <div class="mb-3">
+            {{ password_form.confirm_password.label(class="form-label") }}
+            {{ password_form.confirm_password(class="form-control", placeholder="Confirm new password") }}
+        </div>
+        {{ password_form.submit(class="btn btn-warning") }}
+    </form>
+
+    <hr>
+
+    <!-- 회원 탈퇴 폼 -->
+    <form method="POST" action="{{ url_for('user_bp.settings') }}">
+        {{ delete_form.hidden_tag() }}
+        {{ delete_form.submit(class="btn btn-danger", value="Delete Account") }}
+    </form>
+</div>
+{% endblock %}
+
